@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------------------
+# "OrdererOrgs" - Definition of organizations managing orderer nodes
+# ---------------------------------------------------------------------------
+OrdererOrgs:
+  # ---------------------------------------------------------------------------
+  # Orderer
+  # ---------------------------------------------------------------------------
+  - Name: Orderer
+    Domain: cloud-labs.io
+    CA:
+      Country: CN
+      Province: Chongqing
+      Locality: Chongqing
+    # ---------------------------------------------------------------------------
+    # "Specs" - See PeerOrgs below for complete description
+    # ---------------------------------------------------------------------------
+    Specs:
+      - Hostname: orderer0
+      - Hostname: orderer1
+      - Hostname: orderer2
+      - Hostname: orderer3
+      - Hostname: orderer4
+# ---------------------------------------------------------------------------
+# "PeerOrgs" - Definition of organizations managing peer nodes
+# ---------------------------------------------------------------------------
+PeerOrgs:
+  # ---------------------------------------------------------------------------
+  # storage org for cloud-labs.io
+  # ---------------------------------------------------------------------------
+  - Name: storage
+    Domain: storage.cloud-labs.io
+    EnableNodeOUs: true
+    CA:
+      Country: CN
+      Province: Chongqing
+      Locality: Chongqing
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+  # ---------------------------------------------------------------------------
+  # vhost org for cloud-labs.io
+  # ---------------------------------------------------------------------------
+  - Name: vhost
+    Domain: vhost.cloud-labs.io
+    EnableNodeOUs: true
+    CA:
+      Country: CN
+      Province: Chongqing
+      Locality: Chongqing
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+    
+  

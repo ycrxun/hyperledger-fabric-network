@@ -1,0 +1,160 @@
+version: '3'
+networks:
+  baas:
+    external:
+      name: baas
+services:
+  orderer0:
+    image: hyperledger/fabric-orderer:2.0
+    hostname: orderer0.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=cloudLabsMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    networks:
+      baas:
+        aliases:
+          - orderer0.cloud-labs.io
+    ports:
+      - 7050
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/users:/var/hyperledger/users
+      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+
+  orderer1:
+    image: hyperledger/fabric-orderer:2.0
+    hostname: orderer1.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=cloudLabsMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    networks:
+      baas:
+        aliases:
+          - orderer1.cloud-labs.io
+    ports:
+      - 7050
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+
+  orderer2:
+    image: hyperledger/fabric-orderer:2.0
+    hostname: orderer2.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=cloudLabsMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    networks:
+      baas:
+        aliases:
+          - orderer2.cloud-labs.io
+    ports:
+      - 7050
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+
+  orderer3:
+    image: hyperledger/fabric-orderer:2.0
+    hostname: orderer3.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=cloudLabsMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    networks:
+      baas:
+        aliases:
+          - orderer3.cloud-labs.io
+    ports:
+      - 7050
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+  orderer4:
+    image: hyperledger/fabric-orderer:2.0
+    hostname: orderer4.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=cloudLabsMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    networks:
+      baas:
+        aliases:
+          - orderer4.cloud-labs.io
+    ports:
+      - 7050
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/tls/:/var/hyperledger/orderer/tls

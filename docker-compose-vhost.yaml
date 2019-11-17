@@ -1,0 +1,96 @@
+version: '3'
+networks:
+  baas:
+    external:
+      name: baas
+services:
+  ca0:
+    image: hyperledger/fabric-ca:2.0
+    hostname: ca0.vhost.cloud-labs.io
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca0.vhost.cloud-labs.io
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca/ca.vhost.cloud-labs.io-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ca/8ca3d48f58e20df70aed68b56b49c4afb19e067e3106c3907bc2f02f477bf5fb_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca/tlsca.vhost.cloud-labs.io-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/tlsca/86248f0a934f7d92b0e6a4cc04e15646d79f45ad6f87863a19ae015b682820f9_sk
+      - FABRIC_CA_SERVER_PORT=7054
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    ports:
+      - 7054
+    networks:
+      baas:
+        aliases:
+          - ca0.vhost.cloud-labs.io
+    volumes:
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/ca/:/etc/hyperledger/fabric-ca-server-config/ca/
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/tlsca/:/etc/hyperledger/fabric-ca-server-config/tlsca/
+
+  peer0:
+    image: hyperledger/fabric-peer:2.0
+    hostname: peer0.vhost.cloud-labs.io
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=baas
+      - CORE_PEER_ID=peer0.vhost.cloud-labs.io:7051
+      - CORE_PEER_LOCALMSPID=vhostMSP
+      - CORE_PEER_ADDRESS=peer0.vhost.cloud-labs.io:7051
+      - CORE_PEER_LISTENADDRESS:0.0.0.0:7051
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.vhost.cloud-labs.io:7051
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+      - CORE_PEER_CHAINCODEADDRESS=peer0.vhost.cloud-labs.io:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+    command: peer node start
+    networks:
+      baas:
+        aliases:
+          - peer0.vhost.cloud-labs.io
+    ports:
+      - 7051
+      - 7052
+      - 7053
+    volumes:
+      - /var/run/:/host/var/run/
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/msp:/etc/hyperledger/fabric/msp
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls:/etc/hyperledger/fabric/tls
+
+  cli:
+    image: hyperledger/fabric-tools:2.0
+    tty: true
+    stdin_open: true
+    hostname: cli.vhost.cloud-labs.io
+    environment:
+      - GOPATH=/opt/gopath
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=baas
+      - CORE_PEER_ID=peer0.vhost.cloud-labs.io:7051
+      - CORE_PEER_LOCALMSPID=vhostMSP
+      - CORE_PEER_ADDRESS=peer0.vhost.cloud-labs.io:7051
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/vhost.cloud-labs.io/users/Admin@vhost.cloud-labs.io/msp
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls/ca.crt
+      - ORDERER_SYSCHAN_ID=syschain
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/orderer/crypto/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/msp/tlscacerts/tlsca.cloud-labs.io-cert.pem
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    networks:
+      - baas
+    volumes:
+      - /var/run/:/host/var/run/
+      - $PWD/hyperledger-fabric-network/artifacts/chaincode:/opt/gopath/src
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations
+      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/orderer/crypto/ordererOrganizations
+      - $PWD/hyperledger-fabric-network/artifacts/config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config
+      - $PWD/hyperledger-fabric-network/artifacts/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts

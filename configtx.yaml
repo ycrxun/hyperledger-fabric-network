@@ -1,0 +1,178 @@
+---
+Organizations:
+  - &cloudLabs
+    Name: cloudLabs
+    ID: cloudLabsMSP
+    MSPDir: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('cloudLabsMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('cloudLabsMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('cloudLabsMSP.admin')"
+
+  - &storage
+    Name: storage
+    ID: storageMSP
+    MSPDir: ./artifacts/crypto-config/peerOrganizations/storage.cloud-labs.io/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('storageMSP.admin', 'storageMSP.peer', 'storageMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('storageMSP.admin', 'storageMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('storageMSP.admin')"
+    AnchorPeers:
+      - Host: peer0.storage.cloud-labs.io
+        Port: 7051
+
+  - &vhost
+    Name: vhost
+    ID: vhostMSP
+    MSPDir: ./artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('vhostMSP.admin', 'vhostMSP.peer', 'vhostMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('vhostMSP.admin', 'vhostMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('vhostMSP.admin')"
+    AnchorPeers:
+      - Host: peer0.vhost.cloud-labs.io
+        Port: 7051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V1_3: true
+  Orderer: &OrdererCapabilities
+    V1_1: true
+  Application: &ApplicationCapabilities
+    V1_3: true
+    V1_2: false
+    V1_1: false
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft # solo, kafka
+  EtcdRaft:
+    Consenters:
+      - Host: orderer0.cloud-labs.io
+        Port: 7050
+        ClientTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/tls/server.crt
+        ServerTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/tls/server.crt
+      - Host: orderer1.cloud-labs.io
+        Port: 7050
+        ClientTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/tls/server.crt
+        ServerTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/tls/server.crt
+      - Host: orderer2.cloud-labs.io
+        Port: 7050
+        ClientTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/tls/server.crt
+        ServerTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/tls/server.crt
+      - Host: orderer3.cloud-labs.io
+        Port: 7050
+        ClientTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/tls/server.crt
+        ServerTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/tls/server.crt
+      - Host: orderer4.cloud-labs.io
+        Port: 7050
+        ClientTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/tls/server.crt
+        ServerTLSCert: ./artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/tls/server.crt
+  Addresses:
+    - orderer0.cloud-labs.io:7050
+    - orderer1.cloud-labs.io:7050
+    - orderer2.cloud-labs.io:7050
+    - orderer3.cloud-labs.io:7050
+    - orderer4.cloud-labs.io:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+
+  Organizations:
+    - *cloudLabs
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    # Who may invoke the 'Deliver' API
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    # Who may invoke the 'Broadcast' API
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    # By default, who may modify elements at this config level
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  OrdererGenesis:
+    <<: *ChannelDefaults
+    Capabilities:
+      <<: *ChannelCapabilities
+    Orderer:
+      <<: *OrdererDefaults
+      Capabilities:
+        <<: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - <<: *cloudLabs
+    Consortiums:
+      SeriesConsortium:
+        Organizations:
+          - *storage
+          - *vhost
+
+  SeriesChannel:
+    Consortium: SeriesConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *storage
+        - *vhost
+      Capabilities:
+        <<: *ApplicationCapabilities
+        
+    
