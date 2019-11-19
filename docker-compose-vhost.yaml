@@ -11,10 +11,10 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca0.vhost.cloud-labs.io
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca/ca.vhost.cloud-labs.io-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ca/8ca3d48f58e20df70aed68b56b49c4afb19e067e3106c3907bc2f02f477bf5fb_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ca/683dd1cb65ff6a48cb1b1566b380c0b76b2d3d4ce5b79800e5e5a98019c01dce_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca/tlsca.vhost.cloud-labs.io-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/tlsca/86248f0a934f7d92b0e6a4cc04e15646d79f45ad6f87863a19ae015b682820f9_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/tlsca/e886c3cec95ad716b823542c342a0514d72a289d05213636d81cbb9071a75bd1_sk
       - FABRIC_CA_SERVER_PORT=7054
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     ports:
@@ -24,8 +24,8 @@ services:
         aliases:
           - ca0.vhost.cloud-labs.io
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/ca/:/etc/hyperledger/fabric-ca-server-config/ca/
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/tlsca/:/etc/hyperledger/fabric-ca-server-config/tlsca/
+      - $PWD/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/ca/:/etc/hyperledger/fabric-ca-server-config/ca/
+      - $PWD/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/tlsca/:/etc/hyperledger/fabric-ca-server-config/tlsca/
 
   peer0:
     image: hyperledger/fabric-peer:2.0
@@ -60,8 +60,8 @@ services:
       - 7053
     volumes:
       - /var/run/:/host/var/run/
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/msp:/etc/hyperledger/fabric/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls:/etc/hyperledger/fabric/tls
+      - $PWD/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/msp:/etc/hyperledger/fabric/msp
+      - $PWD/artifacts/crypto-config/peerOrganizations/vhost.cloud-labs.io/peers/peer0.vhost.cloud-labs.io/tls:/etc/hyperledger/fabric/tls
 
   cli:
     image: hyperledger/fabric-tools:2.0
@@ -89,8 +89,8 @@ services:
       - baas
     volumes:
       - /var/run/:/host/var/run/
-      - $PWD/hyperledger-fabric-network/artifacts/chaincode:/opt/gopath/src
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/peerOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/orderer/crypto/ordererOrganizations
-      - $PWD/hyperledger-fabric-network/artifacts/config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config
-      - $PWD/hyperledger-fabric-network/artifacts/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts
+      - $PWD/artifacts/chaincode:/opt/gopath/src
+      - $PWD/artifacts/crypto-config/peerOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations
+      - $PWD/artifacts/crypto-config/ordererOrganizations:/opt/gopath/src/github.com/hyperledger/fabric/orderer/crypto/ordererOrganizations
+      - $PWD/artifacts/config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config
+      - $PWD/artifacts/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts

@@ -24,9 +24,19 @@ function retry() {
 # create channel
 #
 function create() {
-  retry 5 peer channel create -o orderer0.cloud-labs.io:7050 -c alice -f ./config/alice.tx --outputBlock ./config/alice.block --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+  retry 5 peer channel create -o "$ORDERER" -c "$CHANNEL" -f ./config/"$CHANNEL".tx --outputBlock ./config/"$CHANNEL".block --tls "$CORE_PEER_TLS_ENABLED" --cafile "$ORDERER_CA"
 }
 
+#
+# join channel
+#
 function join() {
-  retry 5 peer channel join -b ./alice.block
+  retry 5 peer channel join -b ./config/"$CHANNEL".block
 }
+
+function list() {
+    peer channel list
+}
+
+fn=$1
+${fn}

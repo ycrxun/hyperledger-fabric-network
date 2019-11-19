@@ -31,10 +31,10 @@ services:
     ports:
       - 7050
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/users:/var/hyperledger/users
-      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/msp:/var/hyperledger/orderer/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/users:/var/hyperledger/users
+      - $PWD/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer0.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
 
   orderer1:
     image: hyperledger/fabric-orderer:2.0
@@ -63,9 +63,9 @@ services:
     ports:
       - 7050
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/msp:/var/hyperledger/orderer/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+      - $PWD/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer1.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
 
   orderer2:
     image: hyperledger/fabric-orderer:2.0
@@ -94,9 +94,9 @@ services:
     ports:
       - 7050
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/msp:/var/hyperledger/orderer/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+      - $PWD/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer2.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
 
   orderer3:
     image: hyperledger/fabric-orderer:2.0
@@ -125,9 +125,9 @@ services:
     ports:
       - 7050
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/msp:/var/hyperledger/orderer/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+      - $PWD/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer3.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
   orderer4:
     image: hyperledger/fabric-orderer:2.0
     hostname: orderer4.cloud-labs.io
@@ -155,6 +155,6 @@ services:
     ports:
       - 7050
     volumes:
-      - $PWD/hyperledger-fabric-network/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/msp:/var/hyperledger/orderer/msp
-      - $PWD/hyperledger-fabric-network/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/tls/:/var/hyperledger/orderer/tls
+      - $PWD/artifacts/config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/msp:/var/hyperledger/orderer/msp
+      - $PWD/artifacts/crypto-config/ordererOrganizations/cloud-labs.io/orderers/orderer4.cloud-labs.io/tls/:/var/hyperledger/orderer/tls

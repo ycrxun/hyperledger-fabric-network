@@ -3,11 +3,12 @@
 clear
 
 FABRIC_TAG=2.0
-
+PROFILE=SeriesChannel
+CHANNEL=alice
 echo "Generate channel configuration transaction"
 docker run -it \
-  -v $PWD:/hyperledger-fabric-network \
+  -v "$PWD":/hyperledger-fabric-network \
   -w /hyperledger-fabric-network \
   -e "FABRIC_CFG_PATH=/hyperledger-fabric-network" \
   hyperledger/fabric-tools:$FABRIC_TAG \
-  configtxgen -profile SeriesChannel -outputCreateChannelTx ./artifacts/config/alice.tx -channelID alice
+  sh -c "rm -f ./artifacts/config/$CHANNEL.tx && configtxgen -profile $PROFILE -outputCreateChannelTx ./artifacts/config/$CHANNEL.tx -channelID $CHANNEL"
