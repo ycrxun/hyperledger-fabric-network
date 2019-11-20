@@ -6,7 +6,7 @@ FABRIC_TAG=2.0
 PROFILE=SeriesChannel
 CHANNEL=alice
 echo "Generate channel configuration transaction"
-docker run -it \
+docker run -it --rm \
   -v "$PWD":/hyperledger-fabric-network \
   -w /hyperledger-fabric-network \
   -e "FABRIC_CFG_PATH=/hyperledger-fabric-network" \
